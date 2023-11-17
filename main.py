@@ -36,7 +36,7 @@ async def get_latest_chromedriver_version():
 @app.get("/selenium-check")
 async def checks_selenium():
 
-    path_to_driver = "./browser_driver/driver.exe"
+    path_to_driver = "./browser_driver/driver_linux"
     service = Service(path_to_driver)
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
