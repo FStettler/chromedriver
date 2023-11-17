@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 import requests
 import json
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+
 
 app = FastAPI()
 
@@ -30,7 +33,29 @@ async def get_latest_chromedriver_version():
 
     return response
 
+@app.get("/selenium-check")
+async def checks_selenium():
 
+    path_to_driver = "./browser_driver/driver.exe"
+    service = Service(path_to_driver)
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(service=service, options=options)
+
+    driver.get("https://toscrape.com/")
+
+    tabla = driver.find_elements("xpath","//table/tbody")[0]
+
+    tds = tabla.find_elements("xpath",".//td")
+
+    lista = []
+    for td in tds:
+
+        lista.append(td.text)
+
+    data = {"lista":lista}
+
+    return data
 
 if __name__ == "__main__":
 
